@@ -1,29 +1,29 @@
 const express = require('express');
+const db = require('./configs/mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const  PORT = 5000;
+const router = require('./routes');
+const PORT = 5000;
+
+const coreConfigs = {
+    origin: 'http://localhost:5173',
+  credentials: true, 
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
 
 const app = express();
-app.use(cors());
+
+app.use(cors(coreConfigs));
 app.use(cookieParser());
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-    return res.status(200).json({
-        message: 'connection to backend is successfull',
-        data: {
-            user: 'akash',
-            email: 'akashpadampalle780@gmail.com',
-            age: 21
-        }
-    });
-})
-
+app.use('/', router);
 
 app.listen(5000, (err) => {
-    if(err){
+    if (err) {
         console.log(`error in starting server ${err}`);
+        db.close();
         return;
     }
 
