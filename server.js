@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const passport = require('passport');
 const LocalStrategy = require('./configs/passport-local-strategy');
+const JWTStrategy = require('./configs/passport-jwt-strategy');
 const PORT = 5000;
 
 const coreConfigs = {

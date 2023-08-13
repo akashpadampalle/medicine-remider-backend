@@ -1,6 +1,9 @@
 const bcrypt = require('bcrypt');
 const User = require("../models/user");
 
+//TODO
+const jwt = require('jsonwebtoken');
+
 
 module.exports.create = async (req, res) => {
     try {
@@ -31,9 +34,9 @@ module.exports.create = async (req, res) => {
         })
 
         return res.status(200).json({
-            message: 'user created successfully',
-            user: newUser,
+            message: 'loggin successful',
             success: true,
+            jwtToken: jwt.sign({ _id: newUser._id }, process.env.PASSPORT_JWT_SECRET, { expiresIn: '7d' }),
         });
 
     } catch (error) {
@@ -60,6 +63,19 @@ module.exports.createSession = function (req, res) {
     return res.status(200).json({
         message: 'loggin successful',
         success: true,
-        user: req.user,
+        jwtToken: jwt.sign({ _id: req.user._id }, process.env.PASSPORT_JWT_SECRET, { expiresIn: '7d' }),
     })
+}
+
+
+module.exports.profile = async function (req, res){
+
+    if(!req.user){
+        return res.status(401).json({
+            message: 'unable to find user',
+            success: false
+        });
+    }
+
+    return res.status(200).json(req.user);
 }
