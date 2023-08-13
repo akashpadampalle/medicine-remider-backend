@@ -1,8 +1,12 @@
 const express = require('express');
+
+require('dotenv').config();
+
 const db = require('./configs/mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const router = require('./routes');
+const passport = require('passport');
+const LocalStrategy = require('./configs/passport-local-strategy');
 const PORT = 5000;
 
 const coreConfigs = {
@@ -18,7 +22,9 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use('/', router);
+app.use(passport.initialize());
+
+app.use('/', require('./routes'));
 
 app.listen(5000, (err) => {
     if (err) {
