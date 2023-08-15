@@ -79,3 +79,10 @@ module.exports.profile = async function (req, res){
 
     return res.status(200).json(req.user);
 }
+
+module.exports.userNotFound = function (req, res){
+    return res.status(401).json({
+        message: 'unable to find user',
+        success: false
+    });
+}
